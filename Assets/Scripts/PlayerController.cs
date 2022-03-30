@@ -11,7 +11,6 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-
         anime = GetComponent<Animator>();
     }
 
