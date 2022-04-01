@@ -13,8 +13,10 @@ public class Enemy : MonoBehaviour
     [SerializeField] public float _health = 200;
     [SerializeField] public float _currentHealth;
     [SerializeField] ParticleSystem deathSFX;
-    public NavMeshAgent _navMeshAgent;
+    [SerializeField] NavMeshAgent _navMeshAgent;
+    [SerializeField] float damage ;     
     Animator _anime;
+
     bool IsAlive => _currentHealth > 0;
 
 
@@ -22,7 +24,7 @@ public class Enemy : MonoBehaviour
     {
         instance = this;
         _currentHealth = _health;
-        _navMeshAgent = GetComponent<NavMeshAgent>();
+
         _anime = GetComponent<Animator>();
         _navMeshAgent.enabled = true;
     }
@@ -67,13 +69,13 @@ public class Enemy : MonoBehaviour
     }
     void FollowPlayer()
     {
-        var player = FindObjectOfType<PlayerController>();
+        //var player = FindObjectOfType<PlayerController>();
 
         if (_navMeshAgent.enabled)
         {
-            _navMeshAgent.SetDestination(player.transform.position);
+            _navMeshAgent.SetDestination(PlayerController.Controller.transform.position);
         }
-        if (Vector3.Distance(transform.position, player.transform.position) <= attackRange)
+        if (Vector3.Distance(transform.position, PlayerController.Controller.transform.position) <= attackRange)
         {
             Attack();
         }
@@ -93,7 +95,7 @@ public class Enemy : MonoBehaviour
     }
     void AttackHit()
     {
-        PlayerHealth.playerStartHealth--;
+        PlayerHealth.Instance.GetDamage(damage);
     }
     void HitComplete()
     {

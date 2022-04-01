@@ -1,13 +1,22 @@
+using System.Threading.Tasks;
 using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
-    [SerializeReference] float shootingDelay = 0.1f;
+    public static PlayerController Controller;
+    [SerializeField] public float shootingDelay = 0.1f;
     [SerializeField] float moveSpeed = 5f;
     [SerializeField] Transform bulletStartPos;
     [SerializeField] LayerMask aimLayerMask;
     [SerializeField] float rotationSpeed = 5f;
     private float nextShootTime;
+    public bool TripleShotActive = false;
+
+
     Animator anime;
+    private void Awake()
+    {
+        Controller = this;
+    }
 
     void Start()
     {
@@ -27,8 +36,17 @@ public class PlayerController : MonoBehaviour
 
     private void Shoot()
     {
-        nextShootTime = Time.time + shootingDelay;
-        ActivateBulletFromPool(transform.forward);
+        if (TripleShotActive == false)
+        {
+            nextShootTime = Time.time + shootingDelay;
+            ActivateBulletFromPool(transform.forward);
+        }
+        if (TripleShotActive)
+        {
+            ActivateBulletFromPool(transform.forward);
+            ActivateBulletFromPool(transform.right);
+            ActivateBulletFromPool(-transform.right);
+        }
     }
 
     private void ActivateBulletFromPool(Vector3 direction)

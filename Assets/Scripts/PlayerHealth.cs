@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,17 +7,26 @@ using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour
 {
-    [SerializeField] public static float playerStartHealth = 100;
+    public static PlayerHealth Instance;
+    [SerializeField] public static float playerHealth = 100;
 
     [SerializeField] TMP_Text textHP;
+    private void Awake()
+    {
+        Instance = this;
+    }
     void Update()
     {
-        if (PlayerHealth.playerStartHealth <= 0)
+        if (PlayerHealth.playerHealth <= 0)
         {
-            PlayerHealth.playerStartHealth = 100;
+            PlayerHealth.playerHealth = 100;
             SceneManager.LoadScene(0); // restart scene 
         }
-        textHP.SetText("HP " + playerStartHealth.ToString());
+        textHP.SetText("HP " + playerHealth.ToString());
     }
-
+    public void GetDamage(float damage)
+    {
+        playerHealth -= damage;         
+    }
+   
 }
